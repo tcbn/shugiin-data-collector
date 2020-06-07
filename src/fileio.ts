@@ -1,10 +1,14 @@
 import path from 'path'
 import fs from 'fs'
 
-import { Raw議案, Raw経過 } from './model'
+import { Raw国会, Raw議案, Raw経過 } from './model'
 
 export class Path {
-	public static toRaw回次Path = (回次: string, prefix = 'data') => `${prefix}/raw/第${回次.padStart(4, '0')}回国会`
+	public static toRaw回次Path = (回次: string, prefix = 'data') => `${prefix}/raw/${回次.padStart(4, '0')}`
+
+	public static toRaw国会JsonName = (k: Raw国会) => '国会.json'
+
+	public static toRaw国会Path = (k: Raw国会, prefix = 'data') => `${Path.toRaw回次Path(k.国会回次, prefix)}/${Path.toRaw国会JsonName(k)}`
 
 	public static toRaw議案JsonlName = (g: Raw議案) => '議案.jsonl'
 
@@ -21,8 +25,9 @@ export class Path {
 }
 
 export class Writer {
-	public static writeRaw回次(k: string) {
-		fs.mkdirSync(Path.toRaw回次Path(k), { recursive: true })
+	public static writeRaw国会(k: Raw国会) {
+		fs.mkdirSync(Path.toRaw回次Path(k.国会回次), { recursive: true })
+		fs.writeFileSync(Path.toRaw国会Path(k), JSON.stringify(k))
 	}
 
 	public static writeRaw議案(g: Raw議案) {

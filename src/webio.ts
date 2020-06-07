@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
 
-import { 議案種類, Raw議案, Raw経過 } from './model'
+import { 国会種類, 議案種類, Raw国会, Raw議案, Raw経過 } from './model'
 
 type Settings = {
 	browserLaunch: puppeteer.LaunchOptions,
@@ -21,6 +21,13 @@ const settings: Settings = {
 			'document',
 		]
 	}
+}
+
+type to国会種類 = { [key: string]: 国会種類 }
+const to国会種類: to国会種類 = {
+	'常会': 国会種類.通常国会,
+	'特別会': 国会種類.特別国会,
+	'臨時会': 国会種類.臨時国会,
 }
 
 type to議案MemberName = { [key: string]: string }
@@ -49,6 +56,16 @@ const to議案種類: to議案種類 = {
 	'規則の一覧': 議案種類.規則,
 	'規程の一覧': 議案種類.規程,
 	'憲法八条議決案の一覧': 議案種類.憲法八条議決案,
+}
+
+const extract国会 = (page: puppeteer.Page): Promise<Raw国会> => {
+	return page.evaluate((to国会種類: to国会種類) => {
+		const option = document.querySelector('select[name="kaiji"]>option')
+		const matches = option?.textContent?.match(/第([0-9]+)回国会（(.+)）/)
+		const kaiji = matches ? matches[1] : ''
+		const type = to国会種類[matches ? matches[2] : '']
+		return { '国会回次': kaiji, '国会種類': type }
+	}, to国会種類)
 }
 
 const extract議案 = (page: puppeteer.Page, prototype: {}): Promise<Raw議案[]> => {
@@ -136,7 +153,7 @@ export const list回次 = async () => {
 
 export const fetchRaw = async (
 	start回次: number, end回次: number,
-	on回次: (k: string) => void,
+	on国会: (k: Raw国会) => void,
 	on議案: (g: Raw議案) => void,
 	on経過: (k: Raw経過) => void,
 ) => {
@@ -146,10 +163,12 @@ export const fetchRaw = async (
 
 	for (let kaiji = start回次; kaiji <= end回次; kaiji++) {
 		const 回次 = String(kaiji)
-		on回次(回次)
 
 		const url = `http://www.shugiin.go.jp/internet/itdb_gian.nsf/html/gian/kaiji${kaiji}.htm`
 		await page.goto(url, settings.pageGoto)
+		const kokkai = await extract国会(page)
+		on国会(kokkai)
+
 		const gians = await extract議案(page, { 議案審議回次: 回次 })
 		await Promise.all(gians.map(e => { on議案(e) }))
 
