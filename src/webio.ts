@@ -78,7 +78,7 @@ const extract議案 = (page: puppeteer.Page, prototype: {}): Promise<Raw議案[]
 				case '本文URL':
 					return { [memberName]: td.querySelector('a')?.href }
 				default:
-					return { [memberName]: td.textContent }
+					return { [memberName]: td.textContent?.trim() }
 			}
 		}
 
@@ -105,7 +105,7 @@ const extract経過 = (page: puppeteer.Page, prototype: {}): Promise<Raw経過> 
 			...Array.from(document.querySelectorAll('tr'))
 				.filter(tr => tr.querySelector('td[headers="KOMOKU"]') !== null)
 				.map(tr => {
-					const row = Array.from(tr.querySelectorAll('td'), td => td.textContent)
+					const row = Array.from(tr.querySelectorAll('td'), td => td.textContent?.trim())
 					const left = String(row[0])
 					const right = String(row[1])
 					if (left.indexOf('／') < 0) {
