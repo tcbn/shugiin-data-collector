@@ -88,7 +88,7 @@ gian.command('convert <start> <end>')
 				assert.equal(k.議案番号 ? k.議案番号 : '', rg.議案番号 ? rg.議案番号 : '')
 				assert.equal(k.議案件名, rg.議案件名)
 
-				const gg = 議案s[議案Id]
+				const g = 議案s[議案Id]
 
 				const xtrim = (t: string) => t === undefined || t === '' ? undefined : t
 
@@ -97,7 +97,7 @@ gian.command('convert <start> <end>')
 					return result?.length > 0 ? result : undefined
 				}
 
-				gg.議案経過.push({
+				g.議案経過.push({
 					議案審議国会Id: parseInt(k.議案審議回次),
 					審議状況: rg.審議状況,
 					議案提出者: xsplit(k.議案提出者, '君')?.map(e => e.replace('　', '')),
@@ -132,7 +132,7 @@ gian.command('convert <start> <end>')
 
 		console.log([国会s, 議案count, 経過count])
 
-		Writer.writeObject({ '国会': 国会s, '議案': 議案s })
+		Writer.write衆議院議案Data({ '国会': 国会s, '議案': 議案s })
 	})
 
 program.parse(process.argv)

@@ -1,5 +1,5 @@
 {
-    "name": "Node.js 12 & Typescript",
+    "name": "Node.js 14 & Typescript",
     "dockerFile": "Dockerfile",
     "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"

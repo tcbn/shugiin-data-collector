@@ -2,7 +2,7 @@ import path from 'path'
 import fs, { read } from 'fs'
 import readline from 'readline'
 
-import { Raw国会, Raw議案, Raw経過, toRaw議案Id, 議案 } from './model'
+import { Raw国会, Raw議案, Raw経過, toRaw議案Id, 議案, 衆議院議案Data } from './model'
 import { once } from 'cluster'
 
 export class Path {
@@ -44,8 +44,8 @@ export class Writer {
 		fs.writeFileSync(Path.toRaw経過Path(k), JSON.stringify(k))
 	}
 
-	public static writeObject(g: any) {
-		fs.writeFileSync(`data/gian.json`, JSON.stringify(g, null, 2))
+	public static write衆議院議案Data(g: 衆議院議案Data) {
+		fs.writeFileSync(`data/衆議院議案Data.json`, JSON.stringify(g, null, 2))
 	}
 }
 

@@ -66,6 +66,8 @@ export const parse和暦 = (和暦: string): string | undefined => {
 		+ '-' + day.padStart(2, '0')
 }
 
+export type 衆議院議案Data = { '国会': { [id: number]: 国会 }, '議案': { [id: string]: 議案 } }
+
 export type 国会Id = number
 export type 国会回次 = string
 export type 国会 = {

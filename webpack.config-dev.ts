@@ -1,4 +1,4 @@
-import merge from 'webpack-merge'
+import { merge } from 'webpack-merge'
 import common from './webpack.config'
 
 const config = merge(common, {
