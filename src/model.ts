@@ -121,7 +121,7 @@ export const parse和暦 = (和暦: string): string | undefined => {
 	}
 
 	const [year, month, day] = [elements[2], elements[4], elements[6]].map(e => e.trim())
-	return (eraOffsets[elements[1]] + parseInt(year))
+	return (eraOffsets[elements[1]] + (year === '元' ? 1 : parseInt(year)))
 		+ '-' + month.padStart(2, '0')
 		+ '-' + day.padStart(2, '0')
 }
