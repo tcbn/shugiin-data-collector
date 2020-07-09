@@ -1,0 +1,3 @@
+[submodule "shugiin-data"]
+	path = shugiin-data
+	url = https://github.com/tcbn/shugiin-data.git

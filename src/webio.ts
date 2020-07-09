@@ -7,6 +7,7 @@ type Settings = {
 	pageGoto: puppeteer.DirectNavigationOptions,
 	pageOn: { resourceTypes: puppeteer.ResourceType[] }
 }
+
 const settings: Settings = {
 	browserLaunch: {
 		args: [

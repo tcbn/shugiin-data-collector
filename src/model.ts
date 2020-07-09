@@ -1,3 +1,31 @@
+export type 衆議院議案Data = {
+	'国会': { [id: number]: 国会 },
+	'議案': { [id: string]: 議案 }
+}
+
+export type 国会 = {
+	国会Id: 国会Id,
+	国会回次: 国会回次,
+	国会種類: 国会種類,
+}
+
+export type 国会Id = number
+export type 国会回次 = string
+export enum 国会種類 {
+	通常国会 = '通常国会',
+	臨時国会 = '臨時国会',
+	特別国会 = '特別国会',
+}
+
+export type 議案 = {
+	議案Id: string,
+	議案種類: 議案種類,
+	議案提出国会Id: 国会Id,
+	議案番号: number,
+	議案件名: string,
+	議案経過: 議案経過[]
+}
+
 export enum 議案種類 {
 	衆法 = '衆法',
 	参法 = '参法',
@@ -17,6 +45,44 @@ export enum 議案種類 {
 	憲法八条議決案 = '憲法八条議決案',
 }
 
+export type 議案経過 = {
+	議案審議国会Id: 国会Id,
+	審議状況: string,
+	議案提出者: string[] | undefined,
+	衆議院予備審査議案受理年月日: string | undefined,
+	衆議院予備付託年月日: string | undefined,
+	衆議院予備付託委員会: string | undefined,
+	衆議院議案受理年月日: string | undefined,
+	衆議院付託年月日: string | undefined,
+	衆議院付託委員会: string | undefined,
+	衆議院審査終了年月日: string | undefined,
+	衆議院審査結果: string | undefined,
+	衆議院審議終了年月日: string | undefined,
+	衆議院審議結果: string | undefined,
+	衆議院審議時会派態度: string | undefined,
+	衆議院審議時賛成会派: string[] | undefined,
+	衆議院審議時反対会派: string[] | undefined,
+	参議院予備審査議案受理年月日: string | undefined,
+	参議院予備付託年月日: string | undefined,
+	参議院予備付託委員会: string | undefined,
+	参議院議案受理年月日: string | undefined,
+	参議院付託年月日: string | undefined,
+	参議院付託委員会: string | undefined,
+	参議院審査終了年月日: string | undefined,
+	参議院審査結果: string | undefined,
+	参議院審議終了年月日: string | undefined,
+	参議院審議結果: string | undefined,
+	公布年月日: string | undefined,
+	法律番号: number | undefined,
+}
+
+export const to議案Id = (g: 議案) => {
+	return (g.議案種類)
+		+ '-' + (g.議案提出国会Id.toString().padStart(4, '0'))
+		+ '-' + (g.議案番号 ? g.議案番号.toString().padStart(4, '0') : '0000')
+		+ '-' + (hashCode(g.議案件名).toString(16).padStart(8, '0'))
+}
+
 const hashCode = (s: string): number => {
 	let hash = 0
 	let i = s.length
@@ -24,12 +90,6 @@ const hashCode = (s: string): number => {
 		hash = (hash * 31 + s.charCodeAt(i)) >>> 0
 	}
 	return hash
-}
-
-export enum 国会種類 {
-	通常国会 = '通常国会',
-	臨時国会 = '臨時国会',
-	特別国会 = '特別国会',
 }
 
 export const toRaw議案Id = (k: Raw議案 | Raw経過) => {
@@ -64,56 +124,6 @@ export const parse和暦 = (和暦: string): string | undefined => {
 	return (eraOffsets[elements[1]] + parseInt(year))
 		+ '-' + month.padStart(2, '0')
 		+ '-' + day.padStart(2, '0')
-}
-
-export type 衆議院議案Data = { '国会': { [id: number]: 国会 }, '議案': { [id: string]: 議案 } }
-
-export type 国会Id = number
-export type 国会回次 = string
-export type 国会 = {
-	国会Id: 国会Id,
-	国会回次: 国会回次,
-	国会種類: 国会種類,
-}
-
-export type 議案 = {
-	議案Id: string,
-	議案種類: 議案種類,
-	議案提出国会Id: 国会Id,
-	議案番号: number,
-	議案件名: string,
-	議案経過: 議案経過[]
-}
-
-export type 議案経過 = {
-	議案審議国会Id: 国会Id,
-	審議状況: string,
-	議案提出者: string[] | undefined,
-	衆議院予備審査議案受理年月日: string | undefined,
-	衆議院予備付託年月日: string | undefined,
-	衆議院予備付託委員会: string | undefined,
-	衆議院議案受理年月日: string | undefined,
-	衆議院付託年月日: string | undefined,
-	衆議院付託委員会: string | undefined,
-	衆議院審査終了年月日: string | undefined,
-	衆議院審査結果: string | undefined,
-	衆議院審議終了年月日: string | undefined,
-	衆議院審議結果: string | undefined,
-	衆議院審議時会派態度: string | undefined,
-	衆議院審議時賛成会派: string[] | undefined,
-	衆議院審議時反対会派: string[] | undefined,
-	参議院予備審査議案受理年月日: string | undefined,
-	参議院予備付託年月日: string | undefined,
-	参議院予備付託委員会: string | undefined,
-	参議院議案受理年月日: string | undefined,
-	参議院付託年月日: string | undefined,
-	参議院付託委員会: string | undefined,
-	参議院審査終了年月日: string | undefined,
-	参議院審査結果: string | undefined,
-	参議院審議終了年月日: string | undefined,
-	参議院審議結果: string | undefined,
-	公布年月日: string | undefined,
-	法律番号: number | undefined,
 }
 
 export type Raw国会 = {
